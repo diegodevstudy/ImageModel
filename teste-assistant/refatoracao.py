@@ -2,10 +2,15 @@
 Módulo para cálculo de estatísticas básicas de uma lista de números.
 
 Este módulo fornece funções para calcular métricas estatísticas como
-soma, média, máximo e mínimo de um conjunto de valores numéricos.
+soma, média aritmética, valor máximo e valor mínimo de um conjunto de
+valores numéricos.
 """
 
 from typing import Tuple, List
+
+# Constantes
+SEPARATOR_WIDTH = 50
+DECIMAL_PLACES = 2
 
 
 def calculate_list_statistics(numbers: List[float]) -> Tuple[float, float, float, float]:
@@ -16,75 +21,88 @@ def calculate_list_statistics(numbers: List[float]) -> Tuple[float, float, float
     e valor mínimo de um conjunto de números fornecido.
 
     Args:
-        numbers: Lista de números (int ou float) para análise estatística
+        numbers: Lista de números (int ou float) para análise estatística.
 
     Returns:
-        Tupla contendo (total, média, máximo, mínimo)
-        - total (float): soma de todos os números
-        - média (float): média aritmética dos números
-        - máximo (float): maior valor na lista
-        - mínimo (float): menor valor na lista
+        Tupla contendo (sum_total, arithmetic_mean, max_value, min_value) onde:
+        - sum_total (float): soma de todos os números
+        - arithmetic_mean (float): média aritmética dos números
+        - max_value (float): maior valor na lista
+        - min_value (float): menor valor na lista
 
     Raises:
-        ValueError: se a lista está vazia
-        TypeError: se algum elemento não é numérico
+        ValueError: Se a lista está vazia.
+        TypeError: Se algum elemento não é numérico.
 
-    Exemplo:
+    Exemplos:
         >>> calculate_list_statistics([10, 20, 30])
         (60, 20.0, 30, 10)
+        >>> calculate_list_statistics([5, 15, 25, 35])
+        (80, 20.0, 35, 5)
     """
     if not numbers:
         raise ValueError("A lista de números não pode estar vazia.")
     
     # Validar que todos os elementos são numéricos
     if not all(isinstance(num, (int, float)) for num in numbers):
-        raise TypeError("Todos os elementos devem ser números (int ou float).")
+        raise TypeError(
+            "Todos os elementos devem ser números (int ou float). "
+            f"Tipo inválido encontrado: {type(numbers[0]).__name__}"
+        )
 
     # Calcular total usando sum() built-in
-    total = sum(numbers)
+    sum_total = sum(numbers)
     
-    # Calcular média
-    average = total / len(numbers)
+    # Calcular média aritmética
+    arithmetic_mean = sum_total / len(numbers)
     
     # Encontrar máximo e mínimo usando funções built-in
-    maximum = max(numbers)
-    minimum = min(numbers)
+    max_value = max(numbers)
+    min_value = min(numbers)
     
-    return total, average, maximum, minimum
+    return sum_total, arithmetic_mean, max_value, min_value
 
 
-def display_statistics(total: float, average: float, maximum: float, minimum: float) -> None:
+def display_statistics(
+    sum_total: float,
+    arithmetic_mean: float,
+    max_value: float,
+    min_value: float
+) -> None:
     """
-    Exibe as estatísticas de forma formatada.
+    Exibe as estatísticas de forma formatada no console.
 
     Args:
-        total: soma dos números
-        average: média aritmética
-        maximum: maior valor
-        minimum: menor valor
+        sum_total: soma de todos os números.
+        arithmetic_mean: média aritmética dos números.
+        max_value: maior valor encontrado.
+        min_value: menor valor encontrado.
     """
-    print("\n" + "=" * 50)
-    print("ESTATÍSTICAS DOS NÚMEROS")
-    print("=" * 50)
-    print(f"Total (Soma):        {total:.2f}")
-    print(f"Média Aritmética:    {average:.2f}")
-    print(f"Valor Máximo:        {maximum:.2f}")
-    print(f"Valor Mínimo:        {minimum:.2f}")
-    print("=" * 50 + "\n")
+    separator = "=" * SEPARATOR_WIDTH
+    print(f"\n{separator}")
+    print("ESTATÍSTICAS DOS NÚMEROS".center(SEPARATOR_WIDTH))
+    print(separator)
+    print(f"Total (Soma):        {sum_total:.{DECIMAL_PLACES}f}")
+    print(f"Média Aritmética:    {arithmetic_mean:.{DECIMAL_PLACES}f}")
+    print(f"Valor Máximo:        {max_value:.{DECIMAL_PLACES}f}")
+    print(f"Valor Mínimo:        {min_value:.{DECIMAL_PLACES}f}")
+    print(f"{separator}\n")
 
 
 def main() -> None:
-    """Função principal executando o programa."""
-    # Dados de amostra
+    """Função principal que executa o programa de análise estatística."""
+    # Dados de amostra para análise
     sample_numbers = [23, 7, 45, 2, 67, 12, 89, 34, 56, 11]
     
     print(f"Números analisados: {sample_numbers}")
     
-    # Calcular estatísticas
-    total, average, maximum, minimum = calculate_list_statistics(sample_numbers)
+    # Calcular estatísticas da lista
+    sum_total, arithmetic_mean, max_value, min_value = calculate_list_statistics(
+        sample_numbers
+    )
     
-    # Exibir resultados
-    display_statistics(total, average, maximum, minimum)
+    # Exibir resultados formatados
+    display_statistics(sum_total, arithmetic_mean, max_value, min_value)
 
 
 if __name__ == "__main__":
